@@ -1,38 +1,235 @@
 .App {
   text-align: center;
+  height: 100vh;
+  width: 100vw;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.active {
+  background-color: #293846;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Container {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  text-align: center;
+}
+
+.RegisterPage {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  align-content: space-around;
+  background: linear-gradient(to right, rgb(253, 200, 48), rgb(243, 115, 53));
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  padding: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.LoginButton {
+  height: 48px;
+  width: 128px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(253, 200, 48);
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+.LoginButton:hover {
+  cursor: pointer;
+  transform: translate(0px, -2px);
+}
+.LoginButton:active {
+  background: rgb(243, 115, 53);
+  transform: translate(0px, 2px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ActiveTab {
+  height: 48px;
+  width: 128px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(253, 200, 48);
+  font-size: 20px;
+}
+
+.UnactiveTab {
+  height: 48px;
+  width: 128px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(243, 115, 53);
+  font-size: 20px;
+}
+.UnactiveTab:hover {
+  cursor: pointer;
+  transform: translate(0px, -2px);
+}
+.UnactiveTab:active {
+  background: rgb(253, 200, 48);
+  transform: translate(0px, 2px);
+}
+
+.Form {
+  padding: 10px;
+}
+
+.Text {
+  border: none;
+  height: 32px;
+  width: 256px;
+  border-radius: 8px;
+  font-size: 20px;
+  background: #efefef;
+  color: #303030;
+  font-weight: 600;
+  padding: 4px;
+  padding-left: 16px;
+  outline: none;
+  margin: 5px;
+}
+.Text :focus {
+  border: 5px;
+  border-color: #00b7ff;
+}
+
+.H1 {
+  font-size: 50px;
+  font-weight: 700px;
+}
+
+.Label {
+  font-size: 24px;
+  font-weight: 600px;
+  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Button {
+  height: 48px;
+  width: 128px;
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(243, 115, 53);
+  font-size: 20px;
+}
+.Button:hover {
+  cursor: pointer;
+  transform: translate(0px, -2px);
+}
+.Button:active {
+  background: rgb(253, 200, 48);
+  transform: translate(0px, 2px);
+}
+
+.Select {
+  height: 40px;
+  width: 150px;
+  border-radius: 8px;
+  font-size: 20px;
+  background: #efefef;
+  color: #303030;
+  font-weight: 600;
+  padding: 4px;
+  padding-left: 16px;
+}
+
+.Site {
+  display: flex;
+  flex-direction: row;
+}
+
+.Menu {
+  flex: 20%;
+}
+
+.Page {
+  flex: 80%;
+}
+.PayLabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  font-weight: 600px;
+  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.Checkpaymentlabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  font-weight: 600px;
+  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.Incominglabel {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  font-weight: 600px;
+  padding: 10px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  justify-content: center;
+  align-items: center;
+}
+
+.Table {
+  border-collapse: collapse;
+  width: 75%;
+  font-size: 70;
+}
+
+.Th .Td {
+  padding: 8px;
+  text-align: center;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.Td {
+  text-align: center;
+}
+/* .Th {
+  background-color: rgb(17, 15, 15);
+  color: rgb(230, 230, 230);
+} */
+.Tr {
+  height: 40px;
+  border-radius: 20px;
+  margin: 5px;
+  padding: 5px;
+}
+.ScrollContainer {
+  max-width: 100%;
+  max-height: 450px;
+  overflow-y: scroll;
 }

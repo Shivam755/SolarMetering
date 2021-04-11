@@ -1,31 +1,40 @@
-import React from "react";
-import styled from "styled-components";
+import React, {useState, useEffect, useRef} from "react";
+// import styled from "styled-components";
 import {Link} from 'react-router-dom';
-import web3 from "./web3";
-import bee from './swarm';
-// import ipfs from './ipfs';
 import netMetering from "./netMetering";
-// import app from './corsHandle';
 
-export default function RegisterUser() {
 
-  //A function to add file to ipfs and return the has
-  const addFile = async() =>{
-    const files = await bee.uploadData(buffer);
-    return files[0].hash
-  }
+const RegisterUser = () => {
+    
+    //Variables for storing data
+    let ewalletId, name, phone, state, nPasswd, cPasswd, passwd, email, subID, iread, oread, compID = useRef('');
+    const [data, setData] = useState([]);
+    //creating combobox for company names
+    const compbox = async()=>{
+      //fetching data from contract
+      let temp = await netMetering.methods.companylist().call();
+      //converting it into an array
+      let comp = [];
+      for (let i = 0; i<temp.length; i++)
+      {
+        comp.push([temp[i][0],temp[i][1]]);
+      }
+      localStorage.setItem('State', JSON.stringify(comp));
+      //setting initial value
+      if (comp[0] !== undefined) {
+        compID.current = comp[0][0];
+      }
+      //changing state
+      setData(comp);
+    }
+    //running the above declared function
+    useEffect(()=>{compbox()},[]);
 
-  //Function to handle the file uploaded
-  const captureFile = (e) =>{
-    e.preventDefault();
-    let file = e.target.files[0];
-    let reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onloadend = () => convertToBuffer(reader)
-  } ;
-  
+    //SetWalletId
+    const updateWalletId = (e) =>{
+      ewalletId = e.target.value;
+    }
 
-    let name, phone, state, email, nPasswd, cPasswd, passwd, read, hash='The proof hash';
     //Setname
     const updateName = (e) =>{
       name = e.target.value;
@@ -41,10 +50,10 @@ export default function RegisterUser() {
       state = e.target.value;
     };
 
-    //set Email
-    const updateEmail = (e) =>{
-      email = e.target.value;
-    };
+    //set companyID
+    const updateCompId = (e) =>{
+      compID.current = e.target.value;
+    }
 
     //password
     const updateNPasswd = (e) =>{
@@ -70,17 +79,24 @@ export default function RegisterUser() {
       }
     };
 
+    //set SubID
+    const updateSubId = (e) =>{
+      subID = e.target.value;
+    }
+
+    //set Email
+    const updateEmail = (e) =>{
+      email = e.target.value;
+    };
+
     // Current reading
-    const updateRead = (e) =>{
-      read = e.target.value;
+    const updateGrossRead = (e) =>{
+      oread = e.target.value;
     };
-   
-    //A function to convert to buffer
-    let buffer;
-    const convertToBuffer= async (reader)=>{
-        buffer = await Buffer.from(reader.result);
-        
-    };
+
+    const updateGridRead = (e) =>{
+      iread = e.target.value;
+    }
 
     const submit = async (e) =>{
       e.preventDefault()
@@ -90,187 +106,85 @@ export default function RegisterUser() {
         console.log("passwords dont match!!!");
         return ;
       }
-      let compID = '0xF877DBDD86303EC5B3769898B8FBbA2CC16b9003'
-      //Sending the file to ipfs
-      // app.post('/', async(req, res)=>{
-      //   const data = req.body;
-      //   console.log(data);
-      //   const files = await addFile()
-      //   console.log(res.send(`https://gateway.ipfs.io/ipfs/${files}`))
-      // })
-
-      const files = await addFile();
-      console.log(files);
       //Sending data to smart Contract
-      await web3.eth.getAccounts().then((address)=>{
-        return address[0]
-      }).then(async(walletId)=>{
-        const res = await netMetering.methods.addUser(walletId, name, phone, state, compID, passwd, email, hash, read).send({
-          from: walletId,
-          gas:6721975
-        });
-        alert("Successfull!!!");
-        return res;
-      })
+      console.log(ewalletId, name, phone, state, compID, passwd, email, subID, iread, oread);
+      await netMetering.methods.addUser(subID,ewalletId, name, phone, state, compID.current, passwd, email, iread, oread).send({
+        from: ewalletId,
+        gas:6721975
+      }).then((res) =>{
+        if (res){
+          alert("Successfull!!!");
+          window.location.pathname='/'
+        }
+      });
       
     };
     
 
     return (
-      <RegisterPage>
-        <Link to='/'><LoginButton>Login</LoginButton></Link>  
-        <Tab>
-            <ActiveTab >User</ActiveTab>
-            <Link to='/Sign-up/Grid'><UnactiveTab>Grid-Company</UnactiveTab></Link>
-        </Tab>
-        <H1>User</H1>
-            <Form onSubmit="return false;">
-                <Label>Full Name: </Label>
-                <Text type="Text" onChange={updateName} required/>
+      <div className='Container'>
+      <div className='RegisterPage' onLoad={compbox}>
+        <Link to='/'><button className='LoginButton'>Login</button></Link>  
+        <div className='Tab'>
+            <button className='ActiveTab' >User</button >
+            <Link to='/Sign-up/Grid'><button className='UnactiveTab'>Grid-Company</button ></Link>
+        </div>
+        <h1>User</h1>
+            <form className='Form' onSubmit="return false;">
+
+                <label className="Label">Ethereum account address: </label>
+                <input className='Text' type="Text" onChange={updateWalletId} required/>
                 <br/>
 
-                <Label>Phone Number: </Label>
-                <Text type="Text" onChange={updatePhone} required/>
+                <label className="Label">Full Name: </label>
+                <input className='Text' type="Text" onChange={updateName} required/>
                 <br/>
 
-                <Label>State: </Label>
-                <Text type="Text" onChange={updateState} required/>
+                <label className="Label">Phone Number: </label>
+                <input className='Text' type="Number" onChange={updatePhone} required/>
                 <br/>
 
-                <Label>Email-id: </Label>
-                <Text type="Text" onChange={updateEmail} required/>
+                <label className="Label">State: </label>
+                <input className='Text' type="Text" onChange={updateState} required/>
                 <br/>
 
-                <Label>New Password: </Label>
-                <Text type="Password" onChange={updateNPasswd} required/>
+                <label className='Label' htmlFor="company" >Grid Provider: </label>
+                <select name="company" className='Select' onChange={updateCompId}>
+                  {data.map((el)=>{
+                    return <option value={el[0]}>{el[1]}</option>
+                  })}
+                </select>
                 <br/>
 
-                <Label>Confirm Password: </Label>
-                <Text type="Password" onChange={updateCPasswd} required/>
+                <label className="Label">Email-id(Used for login): </label>
+                <input className='Text' type="Text" onChange={updateEmail} required/>
                 <br/>
 
-                <Label>Document: </Label>
-                <input type="file" onChange={captureFile}/>
+                <label className="Label">New Password: </label>
+                <input className='Text' type="Password" onChange={updateNPasswd} required/>
                 <br/>
 
-                <Label>Current meter reading: </Label>
-                <Text type="Number" onChange={updateRead} required/>
+                <label className="Label">Confirm Password: </label>
+                <input className='Text' type="Password" onChange={updateCPasswd} required/>
                 <br/>
 
+                <label className="Label">Subscriber ID: </label>
+                <input className='Text' type="Text" onChange={updateSubId} required/>
+                <br/>
+                
+                <label className="Label">Current Grid-meter reading: </label>
+                <input className='Text' type="Number" onChange={updateGridRead} required/>
+                <br/>
 
-                <Button onClick={submit}>Signup</Button>
-            </Form>
-      </RegisterPage>
+                <label className="Label">Current Gross-meter reading: </label>
+                <input className='Text' type="Number" onChange={updateGrossRead} required/>
+                <br/>
+
+                <button className='Button' onClick={submit}>Signup</button>
+            </form>
+      </div>
+      </div>
     );
   }
-    const LoginButton = styled.button`
-  height: 48px;
-  width: 128px;
-  outline: none;
-  border-radius: 5px;
-  border: none;
-  background-color:rgb(253, 200, 48);
-  font-size: 20px;
-  &:hover{
-      cursor: pointer;
-      transform: translate(0px, -2px)
-  }
-  &:active{
-      background:rgb(243, 115, 53);
-      transform: translate(0px, 2px)
-  }
-  position: absolute;
-  right: 10px;
-  top: 5px;
-`;
-  const Tab = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
-  const ActiveTab = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(253, 200, 48);
-    font-size: 20px;
-  `;
-  const UnactiveTab = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(243, 115, 53);
-    font-size: 20px;
-    &:hover{
-        cursor: pointer;
-        transform: translate(0px, -2px)
-    }
-    &:active{
-        background:rgb(253, 200, 48);
-        transform: translate(0px, 2px)
-    }
-  `
-  const RegisterPage = styled.div`
-  display: flex;
-  flex-direction: column; 
-  justify-content: center;
-  align-items: center; 
-  align-content: space-around;
-  background:linear-gradient(to right, rgb(253, 200, 48), rgb(243, 115, 53)); 
-  width: 100%; 
-  height: 100%; 
-  background-size : cover;
-  padding:10px; 
-   `;
- const Form = styled.form`
-     padding: 10px;
- `;
- const Text = styled.input`
-     border:none;
-     height: 32px;
-     width: 256px;
-     border-radius: 8px;
-     font-size: 20px;
-     background: #efefef;
-     color: #303030;
-     font-weight: 600;
-     padding: 4px;
-     padding-left: 16px;
-     outline: none;
-     &:focus{
-         border:5px;
-         border-color:#00b7ff;
-     }
- `;
- const H1 = styled.h1`
- font-size: 50px;
- font-weight: 700px;
-`;
-const Label = styled.label`
- font-size: 24px;
- font-weight: 600px;
- padding:10px;
- padding-top: 10px;
- padding-bottom: 10px;
-`;
-const Button = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(243, 115, 53);
-    font-size: 20px;
-    &:hover{
-        cursor: pointer;
-        transform: translate(0px, -2px)
-    }
-    &:active{
-        background:rgb(253, 200, 48);
-        transform: translate(0px, 2px)
-    }
-`;
+
+  export default RegisterUser;

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
 import netMetering from './netMetering';
+import '../App.css';
 
 export default function Login() {
+    sessionStorage.clear()
     //UserId
     const [userId, setUserId] = useState('');
     const updateUserId = (e) =>{
@@ -30,7 +32,8 @@ export default function Login() {
             if (res)
             {
                 console.log("Login Successful!!!");
-                alert("Login Successful!!");
+                sessionStorage.setItem('Credential',JSON.stringify({'id': userId, 'passwd':passwd}))
+                window.location.pathname = './User'
                 document.getElementById("ERROR").style = 'display: none';
             }
             else{
@@ -43,7 +46,8 @@ export default function Login() {
             if (res)
             {
                 console.log("Login Successful!!!");
-                alert("Login Successful!!");
+                sessionStorage.setItem('Credential',JSON.stringify({'id': userId, 'passwd':passwd}))
+                window.location.pathname='/Grid';
                 document.getElementById("ERROR").style = 'display: none';
             }
             else{
@@ -57,31 +61,33 @@ export default function Login() {
     }
 
     return (
+        <div className='Container'>
         <LogPage>
             <Error id='ERROR'>WRONG USERID OR PASSWORD!!!!</Error>
             <Link to='/Sign-up'><SignUp>Sign-up</SignUp></Link>
             
-            <H1>Login</H1>
-            <Form>
+            <h1 className='H1'>Login</h1>
+            <form className='Form'>
             <Sec1>
-                <Label>UserID: </Label>
-                <Text type="Text" value={userId} onChange={updateUserId} placeholder="UserAddress"/>
+                <label className='Label'>UserID: </label>
+                <input className='Text' type="Text" value={userId} onChange={updateUserId} placeholder="UserAddress"/>
                 <br/>
 
-                <Label>Password: </Label>
-                <Text type='Password' value={passwd} onChange={updatePassword} placeholder="Password"/>
+                <label className='Label'>Password: </label>
+                <input className='Text' type='Password' value={passwd} onChange={updatePassword} placeholder="Password"/>
                 <br/>
             </Sec1>
 
-            <Label>Login Type:</Label>
+            <label className='Label'>Login Type:</label>
             <Radiobutton type='radio' name='LoginType' onChange={updateType} value='User'/>
-            <Label>User</Label>
+            <label className='Label'>User</label>
             <Radiobutton type='radio' name='LoginType' onChange={updateType} value='Company'/>
-            <Label>Company</Label>
+            <label className='Label'>Company</label>
             <br/>
-            <Button onClick={LoadPage}>Login</Button>
-            </Form>
+            <button className='Button' onClick={LoadPage}>Login</button>
+            </form>
         </LogPage>
+        </div>
     )
 }
 const Error = styled.h1`
@@ -89,7 +95,6 @@ const Error = styled.h1`
     background: white;
     display: none;
 `
-
 const SignUp = styled.button`
     height: 48px;
     width: 128px;
@@ -121,54 +126,6 @@ const LogPage = styled.div`
     height: 100%;
     padding: 10px;
     position: relative;
-`
-const Form = styled.form`
-    padding: 10px;
-`
-const Text = styled.input`
-    border:none;
-    height: 32px;
-    width: 256px;
-    border-radius: 8px;
-    font-size: 20px;
-    background: #efefef;
-    color: #303030;
-    font-weight: 600;
-    padding: 4px;
-    padding-left: 16px;
-    outline: none;
-    &:focus{
-        border:5px;
-        border-color:#00b7ff;
-    }
-`
-const H1 = styled.h1`
-    font-size: 50px;
-    font-weight: 700px;
-`
-const Label = styled.label`
-    font-size: 26px;
-    font-weight: 600px;
-    padding:10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-`
-const Button = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(243, 115, 53);
-    font-size: 20px;
-    &:hover{
-        cursor: pointer;
-        transform: translate(0px, -2px)
-    }
-    &:active{
-        background:rgb(253, 200, 48);
-        transform: translate(0px, 2px)
-    }
 `
 const Sec1 = styled.div`
     display: flex;

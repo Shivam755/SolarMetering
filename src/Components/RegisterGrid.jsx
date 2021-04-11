@@ -1,12 +1,16 @@
 import React from "react";
-import styled from "styled-components";
 import {Link} from 'react-router-dom';
-import web3 from "./web3";
 import netMetering from "./netMetering";
+import '../App.css'
 
 export default function RegisterGrid() {
   //Name
-  let name, state, nPasswd, cPasswd, passwd;
+  let name, state, nPasswd, cPasswd, passwd, ewalletId;
+
+  //SetWalletId
+  const updateWalletId = (e) =>{
+    ewalletId = e.target.value;
+  }
   const updateName = (e) => {
     name = e.target.value;
   }
@@ -44,158 +48,52 @@ export default function RegisterGrid() {
       console.log("passwords dont match!!!");
       return ;
     }
-    await web3.eth.getAccounts().then((address)=>{
-      console.log(address[0]);
-      return address[0]
-    }).then(async(walletId)=>{
-      const res = await netMetering.methods.addCompany(walletId, name, state, passwd).send({
-        from: walletId,
+    
+      await netMetering.methods.addCompany(ewalletId, name, state, passwd).send({
+        from: ewalletId,
         gas:6721975
+      }).then((res) =>{
+        if (res){
+          alert("Successfull!!!");
+          window.location.pathname='/'
+        }
       });
-      console.log(res);
-      alert("Successfull!!!");
-    })
   };
 
     return (
-      <RegisterPage>
-        <Link to='/'><LoginButton>Login</LoginButton></Link>
-            <Tab>
-            <Link to='/Sign-up'><UnactiveTab>User</UnactiveTab></Link>
-            <ActiveTab>Grid-Company</ActiveTab>
-            </Tab>
+      <div className='Container'>
+      <div className='RegisterPage'>
+        <Link to='/'><button className='LoginButton'>Login</button></Link>
+            <div className='Tab'>
+            <Link to='/Sign-up'><button className='UnactiveTab'>User</button></Link>
+            <button className='ActiveTab'>Grid-Company</button>
+            </div>
             
-            <H1>Company</H1>
-            <Form>
-                <Label>Company Name: </Label>
-                <Text type="Text" onChange={updateName} required/>
+            <h1>Company</h1>
+            <form className='Form'>
+                <label className="Label">Ethereum account address: </label>
+                <input className='Text' type="Text" onChange={updateWalletId} required/>
+                <br/>
+                <label className='Label'>Company Name(Used for login): </label>
+                <input className='Text' type="Text" onChange={updateName} required/>
                 <br/>
 
-                <Label>State: </Label>
-                <Text type="Text" onChange={updateState} required/>
+                <label className='Label'>State: </label>
+                <input className='Text' type="Text" onChange={updateState} required/>
                 <br/>
 
-                <Label>New Password: </Label>
-                <Text type="Password" onChange={updateNPasswd} required/>
+                <label className='Label'>New Password: </label>
+                <input className='Text' type="Password" onChange={updateNPasswd} required/>
                 <br/>
 
-                <Label>Confirm Password: </Label>
-                <Text type="Password" onChange={updateCPasswd} required/>
+                <label className='Label'>Confirm Password: </label>
+                <input className='Text' type="Password" onChange={updateCPasswd} required/>
                 <br/>
 
-                <Button onClick={submit}>Signup</Button>
-            </Form>
-      </RegisterPage>
+                <button className='Button' onClick={submit}>Signup</button>
+            </form>
+      </div>
+      </div>
     );
   }
-  const LoginButton = styled.button`
-  height: 48px;
-  width: 128px;
-  outline: none;
-  border-radius: 5px;
-  border: none;
-  background-color:rgb(253, 200, 48);
-  font-size: 20px;
-  &:hover{
-      cursor: pointer;
-      transform: translate(0px, -2px)
-  }
-  &:active{
-      background:rgb(243, 115, 53);
-      transform: translate(0px, 2px)
-  }
-  position: absolute;
-  right: 10px;
-  top: 5px;
-`;
-  const Tab = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
-  const ActiveTab = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(253, 200, 48);
-    font-size: 20px;
-  `;
-  const UnactiveTab = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(243, 115, 53);
-    font-size: 20px;
-    &:hover{
-        cursor: pointer;
-        transform: translate(0px, -2px)
-    }
-    &:active{
-        background:rgb(253, 200, 48);
-        transform: translate(0px, 2px)
-    }
-  `
-  const RegisterPage = styled.div`
-  display: flex;
-  flex-direction: column; 
-  justify-content: center;
-  align-items: center; 
-  align-content: space-around;
-  background:linear-gradient(to right, rgb(253, 200, 48), rgb(243, 115, 53)); 
-  width: 100%; 
-  height: 100%; 
-  background-size : cover;
-  padding:10px; 
-   `;
- const Form = styled.form`
-     padding: 10px;
- `;
- const Text = styled.input`
-     border:none;
-     height: 32px;
-     width: 256px;
-     border-radius: 8px;
-     font-size: 20px;
-     background: #efefef;
-     color: #303030;
-     font-weight: 600;
-     padding: 4px;
-     padding-left: 16px;
-     outline: none;
-     &:focus{
-         border:5px;
-         border-color:#00b7ff;
-     }
- `;
- const H1 = styled.h1`
- font-size: 50px;
- font-weight: 700px;
-`;
-const Label = styled.label`
- font-size: 24px;
- font-weight: 600px;
- padding:10px;
- padding-top: 10px;
- padding-bottom: 10px;
-`;
-const Button = styled.button`
-    height: 48px;
-    width: 128px;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background-color:rgb(243, 115, 53);
-    font-size: 20px;
-    &:hover{
-        cursor: pointer;
-        transform: translate(0px, -2px)
-    }
-    &:active{
-        background:rgb(253, 200, 48);
-        transform: translate(0px, 2px)
-    }
-`;
+

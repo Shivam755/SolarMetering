@@ -1,7 +1,7 @@
 import web3 from './web3';
 
 // Contract address
-const address = '0x3771863316De47a8b31EE6F9Ac34370c4ad12b50';
+const address = '0x3cdceE18594C10946f3F46C6665AD956e4ec585B';
 
 // Contract ABI
 const abi = [
@@ -35,6 +35,11 @@ const abi = [
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "string",
+				"name": "subId",
+				"type": "string"
+			},
 			{
 				"internalType": "address",
 				"name": "id",
@@ -71,18 +76,205 @@ const abi = [
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "prf",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "iRead",
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "cRead",
+				"name": "oRead",
 				"type": "uint256"
 			}
 		],
 		"name": "addUser",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "companylist",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "ewalletId",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "companyname",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "state",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "password",
+						"type": "string"
+					}
+				],
+				"internalType": "struct Net_metering.company[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "a",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "b",
+				"type": "string"
+			}
+		],
+		"name": "compareStrings",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"name": "getCompdata",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			}
+		],
+		"name": "get_data",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "SubId",
+				"type": "string"
+			}
+		],
+		"name": "rejectCustomer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -128,21 +320,184 @@ const abi = [
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "a",
+				"name": "subId",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "eId",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "b",
+				"name": "phone",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "state",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "gridId",
+				"type": "address"
 			}
 		],
-		"name": "compareStrings",
+		"name": "updateDetails",
 		"outputs": [
 			{
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "subId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "passwd",
+				"type": "string"
+			}
+		],
+		"name": "updatePasswd",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "subId",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "iRead",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "oRead",
+				"type": "uint256"
+			}
+		],
+		"name": "updateReading",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "userlist",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "ewalletId",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "fullName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "phoneNo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "state",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "companyID",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "password",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "subscriberId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "inRead",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "outRead",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "verified",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "rejected",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "inConsumed",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "outConsumed",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Net_metering.user[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -176,6 +531,25 @@ const abi = [
 		"inputs": [
 			{
 				"internalType": "string",
+				"name": "subId",
+				"type": "string"
+			}
+		],
+		"name": "verifyCustomer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
 				"name": "email",
 				"type": "string"
 			},
@@ -191,6 +565,30 @@ const abi = [
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "subId",
+				"type": "string"
+			}
+		],
+		"name": "viewReading",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
